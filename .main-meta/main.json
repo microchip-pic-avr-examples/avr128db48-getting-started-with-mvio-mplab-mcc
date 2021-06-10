@@ -4,10 +4,10 @@
     "content": {
         "metaDataVersion": "1.1.0",
         "name": "com.microchip.mcu8.mplabx.project.avr128db48-getting-started-with-mvio-mplab-mcc",
-        "version": " ",
-        "displayName": "",
+        "version": "1.0.0",
+        "displayName": "Getting Started with Multi Voltage I/O (MVIO)",
         "projectName": "avr128db48-getting-started-with-mvio-mplab-mcc",
-        "shortDescription": "These MPLAB X Melody MCC example Getting Started with Multi Voltage I O MVIO TB3287 show how the MVIO is used on the AVR DB family of microcontrollers",
+        "shortDescription": "These MPLAB X Melody MCC example Getting Started with Multi Voltage I/O (MVIO TB3287) show how the MVIO is used on the AVR DB family of microcontrollers",
         "ide": {
             "name": "MPLAB X",
             "semverRange": ">=5.45.0"
@@ -15,16 +15,16 @@
         "compiler": [
             {
                 "name": "XC8",
-                "semverRange": "^2.31.0"
+                "semverRange": "^2.32.0"
             }
         ],
         "dfp": {
-            "name": "",
-            "semverRange": ""
+            "name": "AVR-Dx_DFP",
+            "semverRange": "^1.7.98"
         },
         "configurator": {
-            "name": "",
-            "semverRange": ""
+            "name": "MCC",
+            "semverRange": ">=4.1.0"
         },
         "device": {
             "metaDataVersion": "1.0.0",
@@ -37,9 +37,33 @@
             }
         },
         "author": "Martin Thomaz",
-        "subcategories": [],
-        "peripherals": [],
-        "keywords": [],
+        "subcategories": [
+            [
+                "Peripherals",
+                "MVIO"
+            ],
+            [
+                "Peripherals",
+                "ADC"
+            ],
+            [
+                "Peripherals",
+                "VREF"
+            ]
+        ],
+        "peripherals": [
+            "MVIO",
+            "ADC",
+	    "VREF"
+        ],
+        "keywords": [
+            "Getting Started",
+            "Multi-Voltage I/O",
+            "VDDIO2",
+            "Melody",
+            "Interrupt",
+	    "Curiosity Nano"
+        ],
         "additionalData": {
             "longDescription": {
                 "metaDataVersion": "1.0.0",
