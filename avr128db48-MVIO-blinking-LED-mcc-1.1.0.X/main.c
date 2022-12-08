@@ -49,7 +49,7 @@ int main(void)
             /*Blink LED at PC0 forever*/
             while (1)
             {
-                IO_LED_PC0_Toggle();
+                IO_PC0_Toggle();
                 DELAY_milliseconds(250);
             }
         }
