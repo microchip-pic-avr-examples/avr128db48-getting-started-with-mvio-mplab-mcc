@@ -34,6 +34,7 @@
 #ifndef MVIO_H
 #define MVIO_H
 
+#include "../system/pins.h"
 #include "../system/utils/compiler.h"
 
 #ifdef __cplusplus
