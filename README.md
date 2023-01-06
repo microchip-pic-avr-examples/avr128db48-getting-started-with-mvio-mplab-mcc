@@ -2,11 +2,10 @@
 
 # Getting Started with Multi Voltage I/O (MVIO)
 
-A new feature introduced in the AVR® DB Family is the Multi-Voltage I/O (MVIO) peripheral. In this example, VDDIO2 supplies a different voltage level PORTC, than on the rest of the PORTs, which are supplied by VDD. It is possible to monitor this voltage level with the internal analog-to-digital converter (ADC) and also possible to get an interrupt when the voltage level for the MVIO, called VDDIO2, goes in and out of acceptable voltage range. 
-
+A new feature introduced in the AVR® DB Family is the Multi-Voltage I/O (MVIO) peripheral. In this example, VDDIO2 supplies a different voltage level PORTC, than on the rest of the PORTs, which are supplied by VDD. It is possible to monitor this voltage level with the internal analog-to-digital converter (ADC) and it is also possible to get an interrupt when the voltage level for the MVIO, called VDDIO2, goes in and out of the acceptable voltage range.
 <a><img src="images/overview.png" alt="overview" width="800"/></a>
 
-These examples show how the Multi-Voltage I/O feature works on the AVR DB family of microcontrollers.
+This MPLAB® X Melody MCC example of Getting Started with Multi Voltage I/O (MVIO) shows how the MVIO is used on the AVR® DB family of microcontrollers.
 
 
 * [**Polling VDDIO2 Status**](reading-the-status-bit.X/):
