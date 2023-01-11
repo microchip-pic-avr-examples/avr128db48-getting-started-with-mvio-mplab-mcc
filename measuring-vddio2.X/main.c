@@ -11,7 +11,7 @@
 */
 
 /*
-© [2022] Microchip Technology Inc. and its subsidiaries.
+ï¿½ [2022] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 
@@ -36,12 +36,19 @@
     Main application
 */
 
+volatile uint16_t result;
+
 int main(void)
 {
     SYSTEM_Initialize();
 
-
     while(1)
     {
+        /* Do ADC conversion on VDDIO/10 */
+        /* shift the result 4 bits to compensate for the 16 over samples*/
+        result = (ADC0_GetConversion(ADC_MUXPOS_VDDIO2DIV10_gc) >> 4);
+        
+        /* Maybe output data on USART to DataVisualizer */
+        
     }    
 }
