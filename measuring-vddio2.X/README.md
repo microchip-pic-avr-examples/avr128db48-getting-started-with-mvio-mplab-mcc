@@ -2,7 +2,7 @@
 [![MCHP](images/microchip.png)](https://www.microchip.com)
 
 # Measuring VDDIO2 with ADC
-This example shows how to configure the ADC to meassure VDDIO2 on the AVR® DB Family of microcontrollers with the Melody MCC Library. 
+This example shows how to configure the ADC to measure VDDIO2 on the AVR® DB Family of microcontrollers with the Melody MCC Library.
 
 <p>
 	<img width=700px height=auto src="images/AVR128DB48_CNANO_HDW_MOD.png">
@@ -24,12 +24,12 @@ This example shows how to configure the ADC to meassure VDDIO2 on the AVR® DB F
 - [MPLAB® Melody Library 1.37.26 or newer](https://www.microchip.com/mplab/mplab-code-configurator) or newer
 - [MCC Device Libraries 8-bit AVR MCUs 2.7.0](https://www.microchip.com/mplab/mplab-code-configurator) or newer
 - [Microchip AVR128DB48 Device Support Pack AVR-Dx_DFP 1.2.88](https://packs.download.microchip.com/) or newer
--  MPLAB Data Visualizer in MPLAB X IDE or any other serial terminal application
+-  MPLAB® Data Visualizer in MPLAB® X IDE or any other serial terminal application
 
 
 ## Hardware Used
 
-- Variable external power supply (1.5V - 3.3V)
+- Variable external power supply (1.5 V - 3.3 V)
 - [AVR128DB48 Curiosity Nano](https://www.microchip.com/DevelopmentTools/ProductDetails/PartNO/EV35L43A)
 
 ## Peripherals Configuration using MCC
@@ -44,11 +44,11 @@ This example shows how to configure the ADC to meassure VDDIO2 on the AVR® DB F
 
 ![ADC_driver](images/MCC_Melody_adding_ADC_driver.png)
 
-- Configure the *VREF* peripheral to provide a reference of 1.024V, which will be sufficient to measure the VDDIO/10.  
+- Configure the *V<sub>REF</sub>* peripheral to provide a reference of 1.024 V, which will be sufficient to measure the VDDIO/10. 
 
 ![Builder](images/MCC_Melody_adding_VREF_config.png)
 
-- Configure the differential *ADC* peripheral to measure 16 samples with the pos input to VDDIO2/10, and the neg input to gnd.
+- Configure the differential ADC peripheral to measure 16 samples with the positive input to VDDIO2/10, and the negative input to gnd.
 
 ![Builder](images/MCC_Melody_adding_ADC_config.png)
 
@@ -94,15 +94,15 @@ int main(void)
 
 ## Operation
 
-1. Download the zip file or clone the example to get the source code
-1. Open the .X file with the MPLAB® X IDE
-1. Program the project to the AVR128DB48 Curiosity Nano: 
-	- First clean and build the project by pressing the *Clean and Build Main Project* button
+1. Download the zip file or clone the example to get the source code.
+2. Open the .X file with the MPLAB® X IDE.
+3. Program the project to the AVR128DB48 Curiosity Nano: 
+	- First clean and build the project by pressing the *Clean and Build Main Project* button.
 	![clean_and_build](images/clean_and_build.png)
-	- Then make and program the project to the AVR128DB48 by clicking the *Make and Program Device Main Project* button
+	- Then make and program the project to the AVR128DB48 by clicking the *Make and Program Device Main Project* button.
 	![make_and_prog](images/make_and_prog.png)
-1. Running in debug mode will allow visualization of the result variable which contains the **VDDIO2 / 10** voltage
+4. Running in debug mode will allow visualization of the result variable which contains the **VDDIO2 / 10** voltage.
 
 ## Summary
 
-This example shows how to add ADC driver support, and use the driver API to measure VDDIO2 supply.
+This example shows how to add ADC driver support and use the driver API to measure the VDDIO2 supply.
