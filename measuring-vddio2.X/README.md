@@ -48,7 +48,7 @@ This example shows how to configure the ADC to measure VDDIO2 on the AVR® DB Fa
 
 ![Builder](images/MCC_Melody_adding_VREF_config.png)
 
-- Configure the differential ADC peripheral to measure 16 samples with the positive input to VDDIO2/10, and the negative input to gnd.
+- Configure the differential *ADC* peripheral to measure 16 samples with the positive input to VDDIO2/10, and the negative input to gnd.
 
 ![Builder](images/MCC_Melody_adding_ADC_config.png)
 
