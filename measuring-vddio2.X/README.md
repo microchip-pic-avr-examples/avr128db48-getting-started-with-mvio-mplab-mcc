@@ -44,11 +44,11 @@ This example shows how to configure the ADC to measure VDDIO2 on the AVR® DB Fa
 
 ![ADC_driver](images/MCC_Melody_adding_ADC_driver.png)
 
-- Configure the *V<sub>REF</sub>* peripheral to provide a reference of 1.024 V, which will be sufficient to measure the VDDIO/10. 
+- Configure the V<sub>REF</sub> peripheral to provide a reference of 1.024 V, which will be sufficient to measure the VDDIO/10. 
 
 ![Builder](images/MCC_Melody_adding_VREF_config.png)
 
-- Configure the differential *ADC* peripheral to measure 16 samples with the positive input to VDDIO2/10, and the negative input to gnd.
+- Configure the differential ADC peripheral to measure 16 samples with the positive input to VDDIO2/10, and the negative input to gnd.
 
 ![Builder](images/MCC_Melody_adding_ADC_config.png)
 
