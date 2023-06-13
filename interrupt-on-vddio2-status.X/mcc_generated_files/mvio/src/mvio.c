@@ -11,7 +11,7 @@
 */
 
 /*
-© [2022] Microchip Technology Inc. and its subsidiaries.
+© [2023] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 
@@ -60,7 +60,7 @@ bool MVIO_isOK(void)
 
 ISR(MVIO_MVIO_vect)
 {
-    /* Insert your MVIO interrupt handling code here */
+	/* Insert your MVIO interrupt handling code here */
     /* Toggle the CNANO LED on interrupt*/
     IO_LED0_PB3_Toggle();
     

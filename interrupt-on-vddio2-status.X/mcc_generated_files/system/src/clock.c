@@ -10,7 +10,7 @@
   * version CLKCTRL Driver Version 1.1.3
 */
 /*
-© [2022] Microchip Technology Inc. and its subsidiaries.
+© [2023] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 
@@ -64,8 +64,8 @@ void CLOCK_Initialize(void)
     //CFDEN disabled; CFDSRC CLKMAIN; CFDTST disabled; 
     ccp_write_io((void*)&(CLKCTRL.MCLKCTRLC),0x0);
 
-    //CFD disabled; INTTYPE INT; 
-    ccp_write_io((void*)&(CLKCTRL.MCLKINTCTRL),0x0);
+    //CFD enabled; INTTYPE INT; 
+    ccp_write_io((void*)&(CLKCTRL.MCLKINTCTRL),0x1);
 
     //CFD disabled; 
     ccp_write_io((void*)&(CLKCTRL.MCLKINTFLAGS),0x0);
@@ -93,6 +93,13 @@ void CFD_Disable()
     ccp_write_io((uint8_t *) & CLKCTRL.MCLKCTRLC, CLKCTRL.MCLKCTRLC & ~CLKCTRL_CFDEN_bm);
 }
 
+ISR(CLKCTRL_CFD_vect)
+{
+  /* Insert your CFD interrupt handling code here */
+	
+    /* Clear the CFD interrupt flag */
+    CLKCTRL.MCLKINTFLAGS = CLKCTRL_CFD_bm;
+}
 
 /**
  End of File

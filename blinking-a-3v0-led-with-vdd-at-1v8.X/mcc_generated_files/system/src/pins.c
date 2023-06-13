@@ -8,11 +8,11 @@
  * @brief This is generated driver implementation for pins. 
  *        This file provides implementations for pin APIs for all pins selected in the GUI.
  *
- * @version Driver Version 1.0.1
+ * @version Driver Version 1.1.0
 */
 
 /*
-© [2022] Microchip Technology Inc. and its subsidiaries.
+© [2023] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 
@@ -34,14 +34,13 @@
 
 #include "../pins.h"
 
-static void (*PC0_InterruptHandler)(void);
 
 void PIN_MANAGER_Initialize()
 {
   /* DIR Registers Initialization */
     PORTA.DIR = 0x0;
     PORTB.DIR = 0x0;
-    PORTC.DIR = 0x1;
+    PORTC.DIR = 0x0;
     PORTD.DIR = 0x0;
     PORTE.DIR = 0x0;
     PORTF.DIR = 0x0;
@@ -118,22 +117,8 @@ void PIN_MANAGER_Initialize()
     PORTMUX.ZCDROUTEA = 0x0;
 
   // register default ISC callback functions at runtime; use these methods to register a custom function
-    PC0_SetInterruptHandler(PC0_DefaultInterruptHandler);
 }
 
-/**
-  Allows selecting an interrupt handler for PC0 at application runtime
-*/
-void PC0_SetInterruptHandler(void (* interruptHandler)(void)) 
-{
-    PC0_InterruptHandler = interruptHandler;
-}
-
-void PC0_DefaultInterruptHandler(void)
-{
-    // add your PC0 interrupt custom code
-    // or set custom function using PC0_SetInterruptHandler()
-}
 ISR(PORTA_PORT_vect)
 { 
     /* Clear interrupt flags */
@@ -148,11 +133,6 @@ ISR(PORTB_PORT_vect)
 
 ISR(PORTC_PORT_vect)
 { 
-    // Call the interrupt handler for the callback registered at runtime
-    if(VPORTC.INTFLAGS & PORT_INT0_bm)
-    {
-       PC0_InterruptHandler(); 
-    }
     /* Clear interrupt flags */
     VPORTC.INTFLAGS = 0xff;
 }
