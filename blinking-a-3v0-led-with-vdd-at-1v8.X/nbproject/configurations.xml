@@ -77,7 +77,7 @@
                    displayName="Important Files"
                    projectFiles="false">
       <itemPath>Makefile</itemPath>
-      <itemPath>avr128db48-MVIO-blinking-LED-mcc-1.0.0.mc3</itemPath>
+      <itemPath>blinking-a-3v0-led-with-vdd-at-1v8.mc3</itemPath>
     </logicalFolder>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>

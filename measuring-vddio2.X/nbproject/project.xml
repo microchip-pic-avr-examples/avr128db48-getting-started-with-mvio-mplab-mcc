@@ -3,7 +3,7 @@
     <type>com.microchip.mplab.nbide.embedded.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>avr128db48-MVIO-measuring-vddio2-mcc-1.0.0</name>
+            <name>measuring-vddio2</name>
             <creation-uuid>660cbffb-cec1-483f-81e3-74bb6c82f1ee</creation-uuid>
             <make-project-type>0</make-project-type>
             <c-extensions>c</c-extensions>
@@ -15,7 +15,11 @@
             <sourceRootList/>
             <confList>
                 <confElem>
-                    <name>default</name>
+                    <name>free</name>
+                    <type>2</type>
+                </confElem>
+                <confElem>
+                    <name>pro</name>
                     <type>2</type>
                 </confElem>
             </confList>

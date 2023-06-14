@@ -10,21 +10,21 @@
         "shortDescription": "These MPLAB X Melody MCC example Getting Started with Multi Voltage I/O (MVIO TB3287) show how the MVIO is used on the AVR DB family of microcontrollers",
         "ide": {
             "name": "MPLAB X",
-            "semverRange": ">=5.45.0"
+            "semverRange": ">=6.10.0"
         },
         "compiler": [
             {
                 "name": "XC8",
-                "semverRange": "^2.32.0"
+                "semverRange": "^2.41.0"
             }
         ],
         "dfp": {
             "name": "AVR-Dx_DFP",
-            "semverRange": "^1.7.98"
+            "semverRange": "^2.3.272"
         },
         "configurator": {
             "name": "MCC",
-            "semverRange": ">=4.1.0"
+            "semverRange": ">=5.3.7"
         },
         "device": {
             "metaDataVersion": "1.0.0",
