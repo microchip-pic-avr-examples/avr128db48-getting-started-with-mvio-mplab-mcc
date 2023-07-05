@@ -3,7 +3,7 @@
     <type>com.microchip.mplab.nbide.embedded.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>avr128db48-MVIO-interrupt-VDDIO2-mcc-1.0.0</name>
+            <name>interrupt-on-vddio2-status</name>
             <creation-uuid>f96bdf2a-6d09-4c34-ab76-45d31c0676fb</creation-uuid>
             <make-project-type>0</make-project-type>
             <c-extensions>c</c-extensions>
