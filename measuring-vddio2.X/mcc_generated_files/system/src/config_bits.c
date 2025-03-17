@@ -5,12 +5,14 @@
  * 
  * @ingroup config_bitsdriver
  * 
- * @brief This file contains the generated Device Configuration Bits file.
+ * @brief This file contains the API implementation for the Device Configuration Bits driver.
  *
- * @version Driver Version 1.0.2
+ * @version Driver Version 1.0.5
+ *
+ * @version Package Version 4.3.0
 */
 /*
-© [2023] Microchip Technology Inc. and its subsidiaries.
+© [2025] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 

@@ -7,11 +7,13 @@
  * 
  * @brief This is the generated driver implementation file for the MAIN driver.
  *
- * @version MAIN Driver Version 1.0.0
+ * @version MAIN Driver Version 1.0.2
+ *
+ * @version Package Version: 3.1.2
 */
 
 /*
-© [2023] Microchip Technology Inc. and its subsidiaries.
+© [2025] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 
@@ -33,14 +35,25 @@
 #include "mcc_generated_files/system/system.h"
 
 /*
+ * @brief Callback function called when VDDIO2 fails
+ * @param none
+ */
+void MVIO_Vddio2FailCallback(void)
+{
+    /* Turn on the CNANO LED on interrupt */
+    LED_SetLow();
+}
+
+/*
     Main application
 */
 
 int main(void)
 {
     SYSTEM_Initialize();
-    
-    
+
+    MVIO_Vddio2CallbackRegister(MVIO_Vddio2FailCallback);
+
     while(1)
     {
     }    

@@ -3,15 +3,17 @@
  * 
  * @file adc0.h
  * 
- * @defgroup adc0 ADC0
+ * @defgroup  adc0 Analog-to-Digital Converter (ADC0)
  * 
- * @brief API prototypes and other datatypes for the ADC0 module driver.
+ * @brief This file contains the API prototypes and data types for the ADC0 driver.
  *
- * @version ADC0 Driver Version 1.0.0
+ * @version ADC0 Driver Version 2.0.0
+ * 
+ * @version ADC0 Package Version 5.0.0
 */
 
 /*
-© [2022] Microchip Technology Inc. and its subsidiaries.
+© [2025] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 
@@ -32,230 +34,262 @@
 */
 
 
-#ifndef ADC0_H_INCLUDED
-#define ADC0_H_INCLUDED
+#ifndef ADC0_H
+#define ADC0_H
 
 #include "../system/utils/compiler.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include "./adc_types.h"
 
 /**
  * @ingroup adc0
- * @enum ADC0_window_mode_t
- * @brief Window Comparator Modes
+ * @brief Initializes the registers based on the configurable options in the MPLABÂ® Code Configurator (MCC) Melody UI for the Analog-to-Digital Converter (ADC) operation.
+ * @param None.
+ * @return None.
  */
-typedef enum {
-    ADC0_window_disabled,  /**<Window Comparison is Disabled*/
-    ADC0_window_below,     /**<Result is below a threshold*/
-    ADC0_window_above,     /**<Result is above a threshold*/
-    ADC0_window_inside,    /**<Result is inside a window*/
-    ADC0_window_outside    /**<Result is outside a window*/
-} ADC0_window_mode_t;
+void ADC0_Initialize(void);
 
 /**
  * @ingroup adc0
- * @typedef void adc_irq_cb_t
- * @brief Function pointer to callback function called by IRQ. NULL=default value: No callback function is to be used.
+ * @brief Deinitializes the registers to Power-on Reset values.
+ * @param None.
+ * @return None.
  */
-typedef void (*adc_irq_cb_t)(void);
+void ADC0_Deinitialize(void);
 
 /**
  * @ingroup adc0
- * @typedef uint32_t adc_result_t
- * @brief Datatype for the result of non-differential ADC conversion.
- */
-typedef uint16_t adc_result_t;
-
-/**
- * @ingroup adc0
- * @typedef int32_t diff_adc_result_t
- * @brief Datatype for the result of differential ADC conversion.
- */
-typedef int16_t diff_adc_result_t;
-
-/**
- * @ingroup adc0
- * @typedef ADC_MUXPOS_t adc_0_channel_t
- * @brief Datatype for the ADC Positive Input Selection
- */
-typedef ADC_MUXPOS_t adc_0_channel_t;
-
-/**
- * @ingroup adc0
- * @typedef ADC_MUXNEG_t adc_0_muxneg_channel_t
- * @brief Datatype for the ADC Negative Input Selection
- */
-typedef ADC_MUXNEG_t adc_0_muxneg_channel_t;
-
-/**
- * @ingroup adc0
- * @brief Initializes ADC interface. If module is configured to disabled state, the clock to the ADC is disabled if this is supported by the device's clock system.
- * @param none
- * @retval 0 - the ADC init was successful
- * @retval 1 - the ADC init was not successful
- */
-int8_t ADC0_Initialize(void);
-
-/**
- * @ingroup adc0
- * @brief Enables ADC0. If supported by the clock system, enables the clock to the ADC. Enables the ADC module by setting the enable-bit in the ADC control register.
- * @param none
- * @return none
+ * @brief Sets the ADC Enable bit to `1`.
+ * @param None.
+ * @return None.
  */
 void ADC0_Enable(void);
 
 /**
  * @ingroup adc0
- * @brief Disables ADC0. Disables the ADC module by clearing the enable-bit in the ADC control register. If supported by the clock system, disables the clock to the ADC.
- * @param none
- * @return none
+ * @brief Sets the ADC Enable bit to `0`.
+ * @param None.
+ * @return None.
  */
 void ADC0_Disable(void);
 
 /**
  * @ingroup adc0
- * @brief Enables conversion auto-trigger
- * @param none
- * @return none
+ * @brief Sets the channel to use for the ADC conversion.
+ * @param channel Desired analog channel. Refer to the @ref adc_channel_t enum for the list of available analog channels.
+ * @return None.
  */
-void ADC0_EnableAutoTrigger(void);
+void ADC0_ChannelSelect(adc_channel_t channel);
 
 /**
  * @ingroup adc0
- * @brief Disables conversion auto-trigger
- * @param none
- * @return none
+ * @brief Starts the ADC conversion on a selected channel. 
+ * @pre Select the channel using @ref ADC0_ChannelSelect and 
+ * call @ref ADC0_Initialize(void) to initialize the ADC module before using this API.
+ * @return None.
  */
-void ADC0_DisableAutoTrigger(void);
+void ADC0_ConversionStart(void);
 
 /**
  * @ingroup adc0
- * @brief Sets conversion window comparator high threshold
- * @param adc_result_t high - desired window comparator high threshold register value
- * @return none
+ * @brief Sets the Result Ready Interrupt Enable (RESRDY) bit to `1`.
+ * @param None.
+ * @return None.
  */
-void ADC0_SetWindowHigh(adc_result_t high);
+void ADC0_ConversionDoneInterruptEnable(void);
 
 /**
  * @ingroup adc0
- * @brief Sets conversion window comparator low threshold
- * @param adc_result_t low - desired window comparator low threshold register value
- * @return none
+ * @brief Sets the Result Ready Interrupt Enable (RESRDY) bit to `0`.
+ * @param None.
+ * @return None.
  */
-void ADC0_SetWindowLow(adc_result_t low);
+void ADC0_ConversionDoneInterruptDisable(void);
 
 /**
  * @ingroup adc0
- * @brief Sets conversion window mode
- * @param ADC0_window_mode_t mode - window mode
- * @return none
- */
-void ADC0_SetWindowMode(ADC0_window_mode_t mode);
-
-/**
- * @ingroup adc0
- * @brief Sets ADC channel to be used for windowed conversion mode
- * @param adc_0_channel_t channel - The ADC channel to start conversion on
- * @return none
- */
-void ADC0_SetWindowChannel(adc_0_channel_t channel);
-
-/**
- * @ingroup adc0
- * @brief Starts a conversion on ADC0
- * @param adc_0_channel_t channel - The ADC channel to start conversion on
- * @return none
- */
-void ADC0_StartConversion(adc_0_channel_t channel);
-
- /**
- * @ingroup adc0
- * @brief Starts a differential conversion on ADC0
- * @param adc_0_channel_t channel - The ADC positive input channel to start conversion on
- * @param adc_0_muxneg_channel_t channel1 - The ADC negative input channel to start conversion on
- * @return none
- */
-void ADC0_StartDiffConversion(adc_0_channel_t channel, adc_0_muxneg_channel_t channel1);
-
- /**
- * @ingroup adc0
- * @brief Stops a conversion on ADC0
- * @param none
- * @return none
- */
-void ADC0_StopConversion(void);
-
-/**
- * @ingroup adc0
- * @brief Checks if the ADC conversion is done
- * @param none
- * @retval 1 (true) - The ADC conversion is done
- * @retval 0 (false) - The ADC converison is not done
+ * @brief Checks if the ongoing ADC conversion is complete.
+ * @param None.
+ * @retval True - The conversion is complete
+ * @retval False - The conversion is ongoing
  */
 bool ADC0_IsConversionDone(void);
 
 /**
  * @ingroup adc0
- * @brief Reads a conversion result from ADC0
- * @param none
- * @return adc_result_t - Conversion result read from the ADC0 module
+ * @brief Retrieves the result of the latest conversion.
+ * @param None.
+ * @return adc_result_t - The result of the conversion
  */
-adc_result_t ADC0_GetConversionResult(void);
+adc_result_t ADC0_ConversionResultGet(void);
 
 /**
  * @ingroup adc0
- * @brief Reads the conversion window result from ADC0
- * @param none
- * @retval 1 (true) - a comparison results in a trigger condition
- * @retval 0 (false) - a comparison does not result in a trigger condition.
+ * @brief Sets the callback function for the Result Ready Interrupt (RESRDY).
+ * @param *callback The pointer to the function to be executed
+ * @return None.
  */
-bool ADC0_GetWindowResult(void);
+void ADC0_ConversionDoneCallbackRegister(void (*callback)(void));
 
 /**
  * @ingroup adc0
- * @brief Starts a conversion, wait until ready, and return the conversion result
- * @param adc_0_channel_t channel - The ADC channel to get the conversion result
- * @return adc_result_t - Conversion result read from the ADC0 ADC module
+ * @brief Starts the conversion and retrieves the result of one conversion on the selected channel. 
+ * @param channel Desired analog channel. Refer to the @ref adc_channel_t enum for the list of available analog channels.
+ * @return adc_result_t - The result of the conversion
  */
-adc_result_t ADC0_GetConversion(adc_0_channel_t channel);
-
- /**
- * @ingroup adc0
- * @brief Starts a differential conversion, wait until ready, and return the conversion result
- * @param adc_0_channel_t channel - The ADC positive input channel to get the conversion result
- * @param adc_0_muxneg_channel_t channel1 - The ADC negative input channel to get the conversion result
- * @return diff_adc_result_t - Conversion result read from the ADC0 ADC module
- */
-diff_adc_result_t ADC0_GetDiffConversion(adc_0_channel_t channel, adc_0_muxneg_channel_t channel1);
+adc_result_t ADC0_ChannelSelectAndConvert(adc_channel_t channel);
 
 /**
  * @ingroup adc0
- * @brief Returns the number of bits in the ADC conversion result
- * @param none
- * @return uint8_t - The number of bits in the ADC conversion result
+ * @brief Returns the resolution of the ADC module.
+ * @param None.
+ * @return uint8_t - Resolution value
  */
-uint8_t ADC0_GetResolution(void);
+uint8_t ADC0_ResolutionGet(void);
 
 /**
  * @ingroup adc0
- * @brief Registers a callback function to be called if conversion satisfies window criteria.
- * @param adc_irq_cb_t f - Pointer to function to be called
- * @return none
+ * @brief Stops the ongoing ADC conversion.
+ * @param None.
+ * @return None.
  */
-void ADC0_RegisterWindowCallback(adc_irq_cb_t f);
+void ADC0_ConversionStop(void);
 
 /**
  * @ingroup adc0
- * @brief Registers a callback function to be called when measurement is complete and a new result is ready.
- * @param adc_irq_cb_t f - Pointer to function to be called
- * @return none
+ * @brief Loads the Sample Length with the specified value.
+ * @param repeatCount Repeat count value. Refer to the @ref adc_repeat_count_t enum for the list of available repeat count values.
+ * @return None.
  */
-void ADC0_RegisterResrdyCallback(adc_irq_cb_t f);
+void ADC0_SampleRepeatCountSet(adc_repeat_count_t repeatCount);
 
-#ifdef __cplusplus
-}
-#endif
+/**
+ * @ingroup adc0
+ * @brief Sets the Computation mode. 
+ * @param computationMode Desired computation mode. Refer to the @ref adc_computation_mode_t enum for the list of available computation modes.
+ * @return None.
+ */
+void ADC0_ComputationModeSet(adc_computation_mode_t computationMode);
 
-#endif /* ADC0_H_INCLUDED */
+/**
+ * @ingroup adc0
+ * @brief Sets the value of the Window Comparator High Threshold (WINHT) register.
+ * @param upperThreshold Upper threshold value of the @ref adc_threshold_t type
+ * @return None.
+ */
+void ADC0_UpperThresholdSet(adc_threshold_t upperThreshold);
+
+/**
+ * @ingroup adc0
+ * @brief Sets the value of the Window Comparator Low Threshold (WINLT) register.
+ * @param lowerThreshold Lower threshold value of the @ref adc_threshold_t type
+ * @return None.
+ */
+void ADC0_LowerThresholdSet(adc_threshold_t upperThreshold);
+
+/**
+ * @ingroup adc0
+ * @brief Sets the Window Comparator mode.
+ * @param thresholdMode Desired threshold mode. Refer to the @ref adc_threshold_mode_t enum for the list of available threshold modes.
+ * @return None.
+ */
+void ADC0_ThresholdModeSet(adc_threshold_mode_t thresholdMode);
+
+/**
+ * @ingroup adc0
+ * @brief Sets the Window Comparator Interrupt Enable (WCMP) bit to `1`.
+ * @param None.
+ * @return None.
+ */
+void ADC0_ThresholdInterruptEnable(void);
+
+/**
+ * @ingroup adc0
+ * @brief Sets the Window Comparator Interrupt Enable (WCMP) bit to `0`.
+ * @param None.
+ * @return None.
+ */
+void ADC0_ThresholdInterruptDisable(void);
+
+/**
+ * @ingroup adc0
+ * @brief Retrieves the value of the accumulated conversions.
+ * @param None.
+ * @return adc_accumulate_t - The value of accumulated conversions
+ */
+adc_accumulate_t ADC0_AccumulatedResultGet(void);
+
+/**
+ * @ingroup adc0
+ * @brief Sets the callback function for the Window Comparator Interrupt (WCMP).
+ * @param *callback The pointer to the function to be executed
+ * @return None.
+ */
+void ADC0_ThresholdCallbackRegister(void (*callback)(void));
+
+/**
+ * @ingroup adc0
+ * @brief Sets the Free-Running (FREERUN) bit to `1`.
+ * @param None.
+ * @return None.
+ */
+void ADC0_ContinuousConversionEnable(void);
+
+/**
+ * @ingroup adc0
+ * @brief Sets the Free-Running (FREERUN) bit to `0`.
+ * @param None.
+ * @return None.
+ */
+void ADC0_ContinuousConversionDisable(void);
+
+/**
+ * @ingroup adc0
+ * @brief Sets the Start Event Input (STARTEI) bit to `1`.
+ * @param None.
+ * @return None.
+ */
+void ADC0_AutoTriggerEnable(void);
+
+/**
+ * @ingroup adc0
+ * @brief Sets the Start Event Input (STARTEI) bit to `0`.
+ * @param None.
+ * @return None.
+ */
+void ADC0_AutoTriggerDisable(void);
+
+/**
+ * @ingroup adc0
+ * @brief Checks the Result Ready Interrupt (RESRDY) flag status.
+ * @param None.
+ * @retval True - RESRDY flag is set
+ * @retval False - RESRDY flag is not set
+ */
+bool ADC0_IsConversionDoneInterruptFlagSet(void);
+
+/**
+ * @ingroup adc0
+ * @brief Clears the Result Ready Interrupt (RESRDY) flag.
+ * @param None.
+ * @return None.
+ */
+void ADC0_ConversionDoneInterruptFlagClear(void);
+
+/**
+ * @ingroup adc0
+ * @brief Checks the Window Comparator Interrupt (WCMP) flag status.
+ * @param None.
+ * @retval True - WCMP flag is set
+ * @retval False - WCMP flag is not set
+ */
+bool ADC0_IsThresholdInterruptFlagSet(void);
+
+/**
+ * @ingroup adc0
+ * @brief Clears the Window Comparator Interrupt (WCMP) flag.
+ * @param None.
+ * @return None.
+ */
+void ADC0_ThresholdInterruptFlagClear(void);
+
+#endif /* ADC0_H */

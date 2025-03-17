@@ -11,7 +11,7 @@
 */
 
 /*
-© [2023] Microchip Technology Inc. and its subsidiaries.
+© [2025] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 
@@ -32,6 +32,7 @@
 */
 
 #include "../mvio.h"
+#include "../../system/pins.h"
 
 
 void (*MVIO_VDDIO2_isr_cb)(void) = NULL;
@@ -60,10 +61,17 @@ bool MVIO_isOK(void)
 
 ISR(MVIO_MVIO_vect)
 {
-	/* Insert your MVIO interrupt handling code here */
-    /* Toggle the CNANO LED on interrupt*/
-    IO_LED0_PB3_Toggle();
-    
-    /* Clear the VDDIO2 interrupt flag */
-    MVIO.INTFLAGS |= MVIO_VDDIO2IF_bm;
+	/* Insert your MVIO interrupt handling code */
+
+    /* The VDDIO2 interrupt flag is cleared by writing 1 to it. */
+
+	 if(MVIO.INTFLAGS & MVIO_VDDIO2IE_bm)
+        {
+            if (MVIO_VDDIO2_isr_cb != NULL)
+            {
+                (*MVIO_VDDIO2_isr_cb)();
+            }
+
+            MVIO.INTFLAGS = MVIO_VDDIO2IE_bm;
+        }	
 }

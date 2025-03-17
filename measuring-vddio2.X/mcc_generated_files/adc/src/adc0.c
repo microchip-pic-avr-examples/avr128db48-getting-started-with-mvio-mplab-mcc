@@ -5,13 +5,15 @@
  * 
  * @ingroup adc0 
  * 
- * @brief API Implementations for ADC0 module driver.
+ * @brief This file contains the API implementations for the ADC0 driver.
  * 
- * @version ADC0 Driver Version 1.0.0
+ * @version ADC0 Driver Version 2.0.0
+ * 
+ * @version ADC0 Package Version 5.0.0
 */
 
 /*
-© [2022] Microchip Technology Inc. and its subsidiaries.
+© [2025] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 
@@ -31,56 +33,66 @@
     THIS SOFTWARE.
 */
 
-
 #include "../adc0.h"
 
-adc_irq_cb_t ADC0_window_cb = NULL;
-adc_irq_cb_t ADC0_resrdy_cb = NULL;
+static void (*ADC0_ConversionDoneCallback)(void);
+static void (*ADC0_ThresholdCallback)(void);
 
-int8_t ADC0_Initialize(void)
+void ADC0_Initialize(void)
 {
-     
-    // SAMPNUM 16 results accumulated; 
-    ADC0.CTRLB = 0x4;
+    // Disable ADC0 module
+    ADC0.CTRLA &= ~(ADC_ENABLE_bm);
+    // Disable ADC0 interrupts
+    ADC0.INTCTRL &= ~(ADC_RESRDY_bm | ADC_WCMP_bm);
+    // Clear ADC0 interrupt flags
+    ADC0.INTFLAGS = (ADC_RESRDY_bm | ADC_WCMP_bm);
+    // Reset interrupt callback handlers
+    ADC0_ConversionDoneCallback = NULL;
+    ADC0_ThresholdCallback = NULL;
 
-    // PRESC CLK_PER divided by 2; 
-    ADC0.CTRLC = 0x0;
+    // Configure ADC0 module registers
+    ADC0.CTRLB = (ADC_SAMPNUM_ACC16_gc);            /* SAMPNUM (16 results accumulated) */
+    ADC0.CTRLC = (ADC_PRESC_DIV2_gc);               /* PRESC (CLK_PER divided by 2) */
+    ADC0.CTRLD = (ADC_INITDLY_DLY0_gc)              /* INITDLY (DLY0) */
+				|(ADC_SAMPDLY_DLY0_gc);             /* SAMPDLY (DLY0) */
+    ADC0.CTRLE = (ADC_WINCM_NONE_gc);               /* WINCM (No Window Comparison) */
+    ADC0.SAMPCTRL = 0x0;                               /* SAMPLEN (0x0) */
+    ADC0.MUXPOS = (ADC_MUXPOS_VDDIO2DIV10_gc);       /* MUXPOS (VDDIO2DIV10) */
+    ADC0.MUXNEG = (ADC_MUXNEG_GND_gc);               /* MUXNEG (GND) */
+    ADC0.COMMAND = (0 << ADC_STCONV_bp)               /* STCONV (disabled) */
+				|(0 << ADC_SPCONV_bp);              /* SPCONV (disabled) */
+    ADC0.EVCTRL = (0 << ADC_STARTEI_bp);             /* STARTEI (disabled) */
+    ADC0.DBGCTRL = (0 << ADC_DBGRUN_bp);              /* DBGRUN (disabled) */
+    ADC0.WINHT = 0x0;                               /* WINHT (0x0) */
+    ADC0.WINLT = 0x0;                               /* WINLT (0x0) */
+    ADC0.INTCTRL = (0 << ADC_RESRDY_bp)               /* RESRDY (disabled) */
+				|(0 << ADC_WCMP_bp);                /* WCMP (disabled) */
 
-    // INITDLY DLY0; SAMPDLY DLY0; 
-    ADC0.CTRLD = 0x0;
+    ADC0.CTRLA = (1 << ADC_ENABLE_bp)               /* ENABLE (enabled) */
+				|(0 << ADC_FREERUN_bp)              /* FREERUN (disabled) */
+				|(ADC_RESSEL_12BIT_gc)              /* RESSEL (12-bit mode) */
+				|(0 << ADC_RUNSTBY_bp)              /* RUNSTBY (disabled) */
+				|(ADC_CONVMODE_SINGLEENDED_gc)      /* CONVMODE (SINGLEENDED) */
+				|(0 << ADC_LEFTADJ_bp);             /* LEFTADJ (disabled) */
+}
 
-    // WINCM No Window Comparison; 
-    ADC0.CTRLE = 0x0;
-
-    // DBGRUN disabled; 
-    ADC0.DBGCTRL = 0x0;
-
-    // STARTEI disabled; 
-    ADC0.EVCTRL = 0x0;
-
-    // RESRDY disabled; WCMP disabled; 
+void ADC0_Deinitialize(void)
+{
+    ADC0.CTRLA = 0x0;
     ADC0.INTCTRL = 0x0;
-
-    // MUXPOS VDDIO2/10; 
-    ADC0.MUXPOS = 0x45;
-
-    // MUXNEG ADC input pin 0; 
-    ADC0.MUXNEG = 0x0;
-
-    // SAMPLEN 0; 
+    ADC0.INTFLAGS = 0x0;
+    ADC0.CTRLB = 0x0;
+    ADC0.CTRLC = 0x0;
+    ADC0.CTRLD = 0x0;
+    ADC0.CTRLE = 0x0;
     ADC0.SAMPCTRL = 0x0;
-
-    // Window comparator high threshold 
-    ADC0.WINHT = 0xFFF;
-
-    // Window comparator low threshold 
+    ADC0.MUXPOS = 0x0;
+    ADC0.MUXNEG = 0x0;
+    ADC0.COMMAND = 0x0;
+    ADC0.EVCTRL = 0x0;
+    ADC0.DBGCTRL = 0x0;
+    ADC0.WINHT = 0x0;
     ADC0.WINLT = 0x0;
-
-    // ENABLE enabled; FREERUN disabled; RESSEL 12-bit mode; RUNSTBY disabled; CONVMODE disabled; LEFTADJ enabled; 
-    ADC0.CTRLA = 0x11;
-
-
-    return 0;
 }
 
 void ADC0_Enable(void)
@@ -93,126 +105,197 @@ void ADC0_Disable(void)
     ADC0.CTRLA &= ~ADC_ENABLE_bm;
 }
 
-void ADC0_EnableAutoTrigger(void)
-{
-    ADC0.EVCTRL |= ADC_STARTEI_bm;
-}
-
-void ADC0_DisableAutoTrigger(void)
-{
-    ADC0.EVCTRL &= ~ADC_STARTEI_bm;
-}
-
-void ADC0_SetWindowHigh(adc_result_t high)
-{
-    ADC0.WINHT = high;
-}
-
-void ADC0_SetWindowLow(adc_result_t low)
-{
-    ADC0.WINLT = low;
-}
-
-void ADC0_SetWindowMode(ADC0_window_mode_t mode)
-{
-    ADC0.CTRLE = mode;
-}
-
-void ADC0_SetWindowChannel(adc_0_channel_t channel)
+void ADC0_ChannelSelect(adc_channel_t channel)
 {
     ADC0.MUXPOS = channel;
 }
 
-void ADC0_StartConversion(adc_0_channel_t channel)
+void ADC0_ConversionStart(void)
 {
-    ADC0.MUXPOS  = channel;
-    ADC0.COMMAND = ADC_STCONV_bm;
+    ADC0.COMMAND |= ADC_STCONV_bm;
 }
 
-void ADC0_StartDiffConversion(adc_0_channel_t channel, adc_0_muxneg_channel_t channel1)
+void ADC0_ConversionDoneInterruptEnable(void)
 {
-    ADC0.MUXPOS  = channel;
-    ADC0.MUXNEG  = channel1;
-    ADC0.COMMAND = ADC_STCONV_bm;
+    ADC0.INTCTRL |= ADC_RESRDY_bm;
 }
 
-void ADC0_StopConversion(void)
+void ADC0_ConversionDoneInterruptDisable(void)
 {
-    ADC0.COMMAND = ADC_SPCONV_bm;
+    ADC0.INTCTRL &= ~ADC_RESRDY_bm;
 }
 
 bool ADC0_IsConversionDone(void)
 {
-    return (ADC0.INTFLAGS & ADC_RESRDY_bm);
+    return (bool)(!(ADC0.COMMAND & ADC_STCONV_bm));
 }
 
-adc_result_t ADC0_GetConversionResult(void)
+adc_result_t ADC0_ConversionResultGet(void)
 {
-    return (ADC0.RES);
+    return (adc_result_t)(ADC0.RES);
 }
 
-bool ADC0_GetWindowResult(void)
+void ADC0_ConversionDoneCallbackRegister(void (*callback)(void))
 {
-    bool temp     = (ADC0.INTFLAGS & ADC_WCMP_bm);
-    ADC0.INTFLAGS = ADC_WCMP_bm; // Clear intflag if set
-    return temp;
+    ADC0_ConversionDoneCallback = callback;
 }
 
-adc_result_t ADC0_GetConversion(adc_0_channel_t channel)
+adc_result_t ADC0_ChannelSelectAndConvert(adc_channel_t channel)
 {
-    adc_result_t res;
+    ADC0.MUXPOS = channel;
+    ADC0.COMMAND |= ADC_STCONV_bm;
 
-    ADC0_StartConversion(channel);
-    while (!ADC0_IsConversionDone());
-    res           = ADC0_GetConversionResult();
-    ADC0.INTFLAGS = ADC_RESRDY_bm;
-    return res;
-}
-
- diff_adc_result_t ADC0_GetDiffConversion(adc_0_channel_t channel, adc_0_muxneg_channel_t channel1)
-{
-    diff_adc_result_t res;
-
-    ADC0_StartDiffConversion(channel, channel1);
-    while (!ADC0_IsConversionDone());
-    res = ADC0_GetConversionResult();
-    ADC0.INTFLAGS |= ADC_RESRDY_bm;
-    return res;
-}
-
-uint8_t ADC0_GetResolution(void)
-{
-    return (ADC0.CTRLA & ADC_RESSEL0_bm) ? 10 : 12;
-}
-
-void ADC0_RegisterWindowCallback(adc_irq_cb_t f)
-{
-    ADC0_window_cb = f;
-}
-
-void ADC0_RegisterResrdyCallback(adc_irq_cb_t f)
-{
-    ADC0_resrdy_cb = f;
-}
-
-ISR(ADC0_WCMP_vect)
-{        
-    // Clear the interrupt flag
-    ADC0.INTFLAGS = ADC_WCMP_bm;
-
-    if (ADC0_window_cb != NULL)
+    while (0U != (ADC0.COMMAND & ADC_STCONV_bm))
     {
-        ADC0_window_cb();
+        // Wait for conversion to finish
+    }
+
+    return (adc_result_t)(ADC0.RES);
+}
+
+uint8_t ADC0_ResolutionGet(void)
+{
+    return (ADC0.CTRLA & ADC_RESSEL_10BIT_gc) ? 10U : 12U;
+}
+
+void ADC0_ConversionStop(void)
+{
+    ADC0.COMMAND |= ADC_SPCONV_bm;
+}
+
+void ADC0_SampleRepeatCountSet(adc_repeat_count_t repeatCount)
+{
+    ADC0.CTRLB = (ADC_SAMPNUM_gm & repeatCount);
+}
+
+void ADC0_ComputationModeSet(adc_computation_mode_t computationMode)
+{
+    if (ADC_BASIC == computationMode)
+    {
+        ADC0.CTRLB = ADC_NO_ACCUMULATION;
+    }
+    else
+    {
+        if (ADC_NO_ACCUMULATION == (ADC0.CTRLB & ADC_SAMPNUM_gm))
+        {
+            ADC0.CTRLB = ADC_2_SAMPLES_ACCUMULATED;
+        }
+        else
+        {
+            // Do nothing
+        }
     }
 }
 
+void ADC0_UpperThresholdSet(adc_threshold_t upperThreshold)
+{
+    ADC0.WINHT = upperThreshold;
+}
+
+void ADC0_LowerThresholdSet(adc_threshold_t lowerThreshold)
+{
+    ADC0.WINLT = lowerThreshold;
+}
+
+void ADC0_ThresholdModeSet(adc_threshold_mode_t thresholdMode)
+{
+    ADC0.CTRLE = thresholdMode;
+}
+
+void ADC0_ThresholdInterruptEnable(void)
+{
+    ADC0.INTCTRL |= ADC_WCMP_bm;
+}
+
+void ADC0_ThresholdInterruptDisable(void)
+{
+    ADC0.INTCTRL &= ~ADC_WCMP_bm;
+}
+
+adc_accumulate_t ADC0_AccumulatedResultGet(void)
+{
+    return (adc_accumulate_t)(ADC0.RES);
+}
+
+void ADC0_ThresholdCallbackRegister(void (*callback)(void))
+{
+    ADC0_ThresholdCallback = callback;
+}
+
+void ADC0_ContinuousConversionEnable(void)
+{
+    ADC0.CTRLA |= ADC_FREERUN_bm;
+}
+
+void ADC0_ContinuousConversionDisable(void)
+{
+    ADC0.CTRLA &= ~ADC_FREERUN_bm;
+}
+
+void ADC0_AutoTriggerEnable(void)
+{
+    ADC0.EVCTRL |= ADC_STARTEI_bm;
+}
+
+void ADC0_AutoTriggerDisable(void)
+{
+    ADC0.EVCTRL &= ~ADC_STARTEI_bm;
+}
+
+bool ADC0_IsConversionDoneInterruptFlagSet(void)
+{
+    return (bool)(ADC0.INTFLAGS & ADC_RESRDY_bm);
+}
+
+void ADC0_ConversionDoneInterruptFlagClear(void)
+{
+    ADC0.INTFLAGS = ADC_RESRDY_bm;
+}
+
+bool ADC0_IsThresholdInterruptFlagSet(void)
+{
+    return (bool)(ADC0.INTFLAGS & ADC_WCMP_bm);
+}
+
+void ADC0_ThresholdInterruptFlagClear(void)
+{
+    ADC0.INTFLAGS = ADC_WCMP_bm;
+}
+
+/* cppcheck-suppress misra-c2012-2.7 */
+/* cppcheck-suppress misra-c2012-8.2 */
+/* cppcheck-suppress misra-c2012-8.4 */
+/* cppcheck-suppress misra-c2012-8.6 */
 ISR(ADC0_RESRDY_vect)
 {
-    // Clear the interrupt flag
+    // Clear result ready interrupt flag
     ADC0.INTFLAGS = ADC_RESRDY_bm;
 
-    if (ADC0_resrdy_cb != NULL)
+    if (NULL != ADC0_ConversionDoneCallback)
     {
-        ADC0_resrdy_cb();
+        ADC0_ConversionDoneCallback();
+    }
+    else
+    {
+        // Do nothing
+    }
+}
+
+/* cppcheck-suppress misra-c2012-2.7 */
+/* cppcheck-suppress misra-c2012-8.2 */
+/* cppcheck-suppress misra-c2012-8.4 */
+/* cppcheck-suppress misra-c2012-8.6 */
+ISR(ADC0_WCMP_vect)
+{
+    // Clear window comparator interrupt flag
+    ADC0.INTFLAGS = ADC_WCMP_bm;
+    
+    if (NULL != ADC0_ThresholdCallback)
+    {
+        ADC0_ThresholdCallback();
+    }
+    else
+    {
+        // Do nothing
     }
 }

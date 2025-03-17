@@ -34,6 +34,12 @@
         </logicalFolder>
       </logicalFolder>
     </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="true">
+      <itemPath>Makefile</itemPath>
+      <itemPath>reading-the-status-bit.mc3</itemPath>
+    </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
                    projectFiles="true">
@@ -62,14 +68,10 @@
       </logicalFolder>
       <itemPath>main.c</itemPath>
     </logicalFolder>
-    <logicalFolder name="ExternalFiles"
-                   displayName="Important Files"
-                   projectFiles="false">
-      <itemPath>Makefile</itemPath>
-      <itemPath>avr128db48-MVIO-polling-VDDIO2-mcc-1.0.0.mc3</itemPath>
-      <itemPath>reading-the-status-bit.mc3</itemPath>
-    </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>.</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="free" type="2">
@@ -80,11 +82,11 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>noID</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>2.41</languageToolchainVersion>
+        <languageToolchainVersion>3.00</languageToolchainVersion>
         <platform>3</platform>
       </toolsSet>
       <packs>
-        <pack name="AVR-Dx_DFP" vendor="Microchip" version="2.3.272"/>
+        <pack name="AVR-Dx_DFP" vendor="Microchip" version="2.7.321"/>
       </packs>
       <ScriptingSettings>
       </ScriptingSettings>
@@ -149,6 +151,7 @@
       </HI-TECH-COMP>
       <HI-TECH-LINK>
         <property key="additional-options-checksum" value=""/>
+        <property key="additional-options-checksumAVR" value=""/>
         <property key="additional-options-code-offset" value=""/>
         <property key="additional-options-command-line" value=""/>
         <property key="additional-options-errata" value=""/>
@@ -201,6 +204,7 @@
         <property key="debugoptions.debug-startup" value="Use system settings"/>
         <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="event.recorder.debugger.behavior" value="Running"/>
         <property key="event.recorder.enabled" value="false"/>
         <property key="event.recorder.scvd.files" value=""/>
         <property key="firmware.path"
@@ -244,24 +248,6 @@
         <property key="coverage-enable" value=""/>
         <property key="stack-guidance" value="false"/>
       </XC8-CO>
-      <XC8-config-global>
-        <property key="advanced-elf" value="true"/>
-        <property key="constdata-progmem" value="true"/>
-        <property key="gcc-opt-driver-new" value="true"/>
-        <property key="gcc-opt-std" value="-std=c99"/>
-        <property key="gcc-output-file-format" value="dwarf-3"/>
-        <property key="mapped-progmem" value="false"/>
-        <property key="omit-pack-options" value="false"/>
-        <property key="omit-pack-options-new" value="1"/>
-        <property key="output-file-format" value="-mcof,+elf"/>
-        <property key="smart-io-format" value=""/>
-        <property key="stack-size-high" value="auto"/>
-        <property key="stack-size-low" value="auto"/>
-        <property key="stack-size-main" value="auto"/>
-        <property key="stack-type" value="compiled"/>
-        <property key="user-pack-device-support" value=""/>
-        <property key="wpo-lto" value="false"/>
-      </XC8-config-global>
       <nEdbgTool>
         <property key="AutoSelectMemRanges" value="auto"/>
         <property key="communication.activationmode" value="nohv"/>
@@ -270,6 +256,7 @@
         <property key="debugoptions.debug-startup" value="Use system settings"/>
         <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="event.recorder.debugger.behavior" value="Running"/>
         <property key="event.recorder.enabled" value="false"/>
         <property key="event.recorder.scvd.files" value=""/>
         <property key="firmware.path"
@@ -318,11 +305,11 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>noID</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>2.41</languageToolchainVersion>
+        <languageToolchainVersion>3.00</languageToolchainVersion>
         <platform>3</platform>
       </toolsSet>
       <packs>
-        <pack name="AVR-Dx_DFP" vendor="Microchip" version="2.3.272"/>
+        <pack name="AVR-Dx_DFP" vendor="Microchip" version="2.7.321"/>
       </packs>
       <ScriptingSettings>
       </ScriptingSettings>
@@ -387,6 +374,7 @@
       </HI-TECH-COMP>
       <HI-TECH-LINK>
         <property key="additional-options-checksum" value=""/>
+        <property key="additional-options-checksumAVR" value=""/>
         <property key="additional-options-code-offset" value=""/>
         <property key="additional-options-command-line" value=""/>
         <property key="additional-options-errata" value=""/>
@@ -439,6 +427,7 @@
         <property key="debugoptions.debug-startup" value="Use system settings"/>
         <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="event.recorder.debugger.behavior" value="Running"/>
         <property key="event.recorder.enabled" value="false"/>
         <property key="event.recorder.scvd.files" value=""/>
         <property key="firmware.path"
@@ -482,24 +471,6 @@
         <property key="coverage-enable" value=""/>
         <property key="stack-guidance" value="false"/>
       </XC8-CO>
-      <XC8-config-global>
-        <property key="advanced-elf" value="true"/>
-        <property key="constdata-progmem" value="true"/>
-        <property key="gcc-opt-driver-new" value="true"/>
-        <property key="gcc-opt-std" value="-std=c99"/>
-        <property key="gcc-output-file-format" value="dwarf-3"/>
-        <property key="mapped-progmem" value="false"/>
-        <property key="omit-pack-options" value="false"/>
-        <property key="omit-pack-options-new" value="1"/>
-        <property key="output-file-format" value="-mcof,+elf"/>
-        <property key="smart-io-format" value=""/>
-        <property key="stack-size-high" value="auto"/>
-        <property key="stack-size-low" value="auto"/>
-        <property key="stack-size-main" value="auto"/>
-        <property key="stack-type" value="compiled"/>
-        <property key="user-pack-device-support" value=""/>
-        <property key="wpo-lto" value="false"/>
-      </XC8-config-global>
       <nEdbgTool>
         <property key="AutoSelectMemRanges" value="auto"/>
         <property key="communication.activationmode" value="nohv"/>
@@ -508,6 +479,7 @@
         <property key="debugoptions.debug-startup" value="Use system settings"/>
         <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="event.recorder.debugger.behavior" value="Running"/>
         <property key="event.recorder.enabled" value="false"/>
         <property key="event.recorder.scvd.files" value=""/>
         <property key="firmware.path"

@@ -12,7 +12,7 @@
 */
 
 /*
-© [2023] Microchip Technology Inc. and its subsidiaries.
+© [2025] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 
@@ -34,16 +34,10 @@
 
 #include "../pins.h"
 
+static void (*LED_InterruptHandler)(void);
 
 void PIN_MANAGER_Initialize()
 {
-  /* DIR Registers Initialization */
-    PORTA.DIR = 0x0;
-    PORTB.DIR = 0x0;
-    PORTC.DIR = 0x0;
-    PORTD.DIR = 0x0;
-    PORTE.DIR = 0x0;
-    PORTF.DIR = 0x0;
 
   /* OUT Registers Initialization */
     PORTA.OUT = 0x0;
@@ -52,6 +46,14 @@ void PIN_MANAGER_Initialize()
     PORTD.OUT = 0x0;
     PORTE.OUT = 0x0;
     PORTF.OUT = 0x0;
+
+  /* DIR Registers Initialization */
+    PORTA.DIR = 0x0;
+    PORTB.DIR = 0x0;
+    PORTC.DIR = 0x1;
+    PORTD.DIR = 0x0;
+    PORTE.DIR = 0x0;
+    PORTF.DIR = 0x0;
 
   /* PINxCTRL registers Initialization */
     PORTA.PIN0CTRL = 0x0;
@@ -117,8 +119,22 @@ void PIN_MANAGER_Initialize()
     PORTMUX.ZCDROUTEA = 0x0;
 
   // register default ISC callback functions at runtime; use these methods to register a custom function
+    LED_SetInterruptHandler(LED_DefaultInterruptHandler);
 }
 
+/**
+  Allows selecting an interrupt handler for LED at application runtime
+*/
+void LED_SetInterruptHandler(void (* interruptHandler)(void)) 
+{
+    LED_InterruptHandler = interruptHandler;
+}
+
+void LED_DefaultInterruptHandler(void)
+{
+    // add your LED interrupt custom code
+    // or set custom function using LED_SetInterruptHandler()
+}
 ISR(PORTA_PORT_vect)
 { 
     /* Clear interrupt flags */
@@ -133,6 +149,11 @@ ISR(PORTB_PORT_vect)
 
 ISR(PORTC_PORT_vect)
 { 
+    // Call the interrupt handler for the callback registered at runtime
+    if(VPORTC.INTFLAGS & PORT_INT0_bm)
+    {
+       LED_InterruptHandler(); 
+    }
     /* Clear interrupt flags */
     VPORTC.INTFLAGS = 0xff;
 }

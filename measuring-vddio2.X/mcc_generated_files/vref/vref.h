@@ -5,12 +5,12 @@
  * 
  * @defgroup vref VREF
  * 
- * @brief This file contains API prototypes and other datatypes for VREF module.
+ * @brief This file contains the API prototypes for the VREF module.
  *
  * @version VREF Driver Version 1.0.0
 */
 /*
-© [2022] Microchip Technology Inc. and its subsidiaries.
+© [2025] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 
@@ -42,9 +42,9 @@ extern "C" {
 
 /**
  * @ingroup vref
- * @brief This API initializes the VREF module and be called before any other VREF routines.
- * @param void
- * @return void
+ * @brief Initializes the VREF module.
+ * @param None.
+ * @retval 0 - VREF is initialized successfully.
  */
 int8_t VREF_Initialize(void);
 

@@ -1,16 +1,16 @@
 /**
- * VREF Generated Driver File
+ * VREF Generated Driver File.
  *
  * @file vref.c
  * 
  * @ingroup vref 
  * 
- * @brief This file contains the driver code for VREF module.
+ * @brief This file contains the API implementation for the VREF module.
  * 
  * @version VREF Driver Version 1.0.0
 */
 /*
-© [2022] Microchip Technology Inc. and its subsidiaries.
+© [2025] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 

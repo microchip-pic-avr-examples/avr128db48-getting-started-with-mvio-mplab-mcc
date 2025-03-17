@@ -4,12 +4,8 @@
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
             <name>blinking-a-3v0-led-with-vdd-at-1v8</name>
-            <creation-uuid>afd2d328-c023-4d7e-ae05-191aa76d912b</creation-uuid>
+            <creation-uuid>1cd1e0e6-1582-4357-8c15-1ea293bb06a5</creation-uuid>
             <make-project-type>0</make-project-type>
-            <c-extensions>c</c-extensions>
-            <cpp-extensions/>
-            <header-extensions>h</header-extensions>
-            <asminc-extensions/>
             <sourceEncoding>ISO-8859-1</sourceEncoding>
             <make-dep-projects/>
             <sourceRootList/>
